@@ -1,0 +1,171 @@
+Terminals unused in grammar
+
+    PIPE
+
+
+Grammar
+
+    0 $accept: start $end
+
+    1 start: %empty
+    2      | start command TERMINATE
+
+    3 command: command redirect
+    4        | CMD args
+    5        | CMD
+
+    6 redirect: REDIRECT_IN FILENAME
+    7         | REDIRECT_OUT FILENAME
+
+    8 args: ARG args
+    9     | ARG
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    error (256)
+    CMD <str> (258) 4 5
+    ARG <str> (259) 8 9
+    FILENAME <str> (260) 6 7
+    REDIRECT_IN (261) 6
+    REDIRECT_OUT (262) 7
+    PIPE (263)
+    TERMINATE (264) 2
+
+
+Nonterminals, with rules where they appear
+
+    $accept (10)
+        on left: 0
+    start (11)
+        on left: 1 2
+        on right: 0 2
+    command <pCommand> (12)
+        on left: 3 4 5
+        on right: 2 3
+    redirect <pRedirect> (13)
+        on left: 6 7
+        on right: 3
+    args <pArgNode> (14)
+        on left: 8 9
+        on right: 4 8
+
+
+State 0
+
+    0 $accept: . start $end
+
+    $default  reduce using rule 1 (start)
+
+    start  go to state 1
+
+
+State 1
+
+    0 $accept: start . $end
+    2 start: start . command TERMINATE
+
+    $end  shift, and go to state 2
+    CMD   shift, and go to state 3
+
+    command  go to state 4
+
+
+State 2
+
+    0 $accept: start $end .
+
+    $default  accept
+
+
+State 3
+
+    4 command: CMD . args
+    5        | CMD .
+
+    ARG  shift, and go to state 5
+
+    $default  reduce using rule 5 (command)
+
+    args  go to state 6
+
+
+State 4
+
+    2 start: start command . TERMINATE
+    3 command: command . redirect
+
+    REDIRECT_IN   shift, and go to state 7
+    REDIRECT_OUT  shift, and go to state 8
+    TERMINATE     shift, and go to state 9
+
+    redirect  go to state 10
+
+
+State 5
+
+    8 args: ARG . args
+    9     | ARG .
+
+    ARG  shift, and go to state 5
+
+    $default  reduce using rule 9 (args)
+
+    args  go to state 11
+
+
+State 6
+
+    4 command: CMD args .
+
+    $default  reduce using rule 4 (command)
+
+
+State 7
+
+    6 redirect: REDIRECT_IN . FILENAME
+
+    FILENAME  shift, and go to state 12
+
+
+State 8
+
+    7 redirect: REDIRECT_OUT . FILENAME
+
+    FILENAME  shift, and go to state 13
+
+
+State 9
+
+    2 start: start command TERMINATE .
+
+    $default  reduce using rule 2 (start)
+
+
+State 10
+
+    3 command: command redirect .
+
+    $default  reduce using rule 3 (command)
+
+
+State 11
+
+    8 args: ARG args .
+
+    $default  reduce using rule 8 (args)
+
+
+State 12
+
+    6 redirect: REDIRECT_IN FILENAME .
+
+    $default  reduce using rule 6 (redirect)
+
+
+State 13
+
+    7 redirect: REDIRECT_OUT FILENAME .
+
+    $default  reduce using rule 7 (redirect)

@@ -1,0 +1,57 @@
+{
+    "tasks": [
+        {
+            "label": "Build flex file",
+            "command": "/usr/bin/flex",
+            "args": [
+                "myshell_lexer.l"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Build bison file",
+            "command": "/usr/bin/bison",
+            "args": [
+                "-d",
+                "myshell_parser.y"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "type": "cppbuild",
+            "label": "C/C++: gcc build active file",
+            "command": "/usr/bin/gcc",
+            "args": [
+                "*.c",
+                "-o",
+                "myshell"
+            ],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Build MyShell",
+            "dependsOn": [
+                "Build bison file",
+                "Build flex file",
+                "C/C++: gcc build active file"
+            ],
+            "dependsOrder": "sequence"
+        }
+    ],
+    "version": "2.0.0"
+}
